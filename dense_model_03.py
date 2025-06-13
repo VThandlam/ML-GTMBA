@@ -14,9 +14,9 @@ import matplotlib.pyplot as plt
 import shap
 
 # Load and preprocess dataset
-dataset = loadtxt('../global_sw_train.csv', delimiter=',', skiprows=1)
-X = dataset[:, :7]
-Y = dataset[:, 7].reshape(-1, 1)
+dataset = loadtxt('../jan_1_train_only_precip.csv', delimiter=',', skiprows=1)
+X = dataset[:, :14]
+Y = dataset[:, 14].reshape(-1, 1)
 X, Y = shuffle(X, Y)
 x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.20, random_state=42)
 
@@ -65,7 +65,7 @@ model.compile(optimizer=optimizer, loss='mse')
 model.summary()
 
 es = EarlyStopping(monitor='val_loss', mode='min', patience=100, verbose=1, restore_best_weights=True)
-mc = ModelCheckpoint('global_sw_train_only_precip.keras', monitor='val_loss', mode='min',
+mc = ModelCheckpoint('jan_1_train_only_precip.keras', monitor='val_loss', mode='min',
                      save_best_only=True, verbose=1)
 
 history = model.fit(train_data, validation_data=val_data, epochs=5000,
@@ -79,8 +79,8 @@ predictions = model.predict(x_test)
 pred_rescaled = output_scaler.inverse_transform(predictions)
 y_test_rescaled = output_scaler.inverse_transform(y_test_scaled)
 
-np.savetxt("global_sw_only_precip_x_predictions.csv", pred_rescaled, delimiter=",")
-np.savetxt("global_sw_only_precip_y_original.csv", y_test_rescaled, delimiter=",")
+np.savetxt("jan_1_only_precip_x_predictions.csv", pred_rescaled, delimiter=",")
+np.savetxt("jan_1_only_precip_y_original.csv", y_test_rescaled, delimiter=",")
 
 mae = mean_absolute_error(y_test_rescaled, pred_rescaled)
 r2 = r2_score(y_test_rescaled, pred_rescaled)
@@ -95,7 +95,7 @@ plt.xlabel('Epoch')
 plt.ylabel('MSE')
 plt.legend()
 plt.grid(True)
-plt.savefig('global_sw_only_precip_training_loss.pdf', format='pdf')
+plt.savefig('jan_1_only_precip_training_loss.pdf', format='pdf')
 plt.show()
 
 # Predictions vs Ground Truth
@@ -107,7 +107,7 @@ plt.xlabel('True Values')
 plt.ylabel('Predicted Values')
 plt.title('True vs. Predicted')
 plt.grid(True)
-plt.savefig('global_sw_only_precip_true_vs_predicted.pdf', format='pdf')
+plt.savefig('jan_1_only_precip_true_vs_predicted.pdf', format='pdf')
 plt.show()
 
 # Residuals plot

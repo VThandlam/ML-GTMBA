@@ -15,9 +15,9 @@ import shap
 import pandas as pd
 
 # Load and preprocess dataset
-dataset = loadtxt('../global_sw_train.csv', delimiter=',', skiprows=1)
-X = dataset[:, :7]
-Y = dataset[:, 7].reshape(-1, 1)
+dataset = loadtxt('../jan_1_train_only_precip.csv', delimiter=',', skiprows=1)
+X = dataset[:, :14]
+Y = dataset[:, 14].reshape(-1, 1)
 X, Y = shuffle(X, Y)
 x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.20, random_state=42)
 
